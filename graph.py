@@ -5,8 +5,13 @@ import os
 path = os.path.dirname(os.path.realpath(__file__))
 os.chdir(path)
 files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
+files.reverse()
 
-newest = files[-1]
+for one_file in files:
+    if one_file[-4:] == ".txt":
+        newest = one_file
+        break
+
 print("Opening:", newest)
 
 f = open(newest, "r")
