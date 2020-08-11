@@ -5,7 +5,7 @@ import os
 import sys
 import json
 
-def graph(channel, name, data):
+def graph(channel, name, data, color):
 	value = data.get(name)
 	value = value.items()
 	
@@ -14,13 +14,13 @@ def graph(channel, name, data):
     
 	channel = channel[1:]
     
-	plt.plot(channel, label = name)
+	plt.plot(channel, label = name, color = color)
 
 
 def main():
 	arg = sys.argv
 	path = os.path.dirname(os.path.realpath(__file__))
-	path += "/payload"
+	#path += "/payload"
 	os.chdir(path)
 	files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
 	files.reverse()
@@ -41,7 +41,7 @@ def main():
 		print("A channel not graphed")
 	else:
 		a = []
-		graph(a, "a", data)
+		graph(a, "a", data, "red")
 		
 	try:
 		arg.index("b")
@@ -49,7 +49,7 @@ def main():
 		print("B channel not graphed")
 	else:
 		b = []
-		graph(b, "b", data)
+		graph(b, "b", data, "blue")
 		
 	try:
 		arg.index("c")
@@ -57,7 +57,7 @@ def main():
 		print("C channel not graphed")
 	else:
 		c = []
-		graph(c, "c", data)
+		graph(c, "c", data, "green")
 
 	plt.legend()
 	plt.grid(b = True, which = 'both')
