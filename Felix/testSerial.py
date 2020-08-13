@@ -1,9 +1,8 @@
-# Avec baud rate de 220000 --> environ 1500 S/s
+# Avec baud rate de 220000 --> environ 1810 S/s
 
 import serial
 import time
 import json
-import re
 import sys
 
 t_0 = 0
@@ -22,8 +21,11 @@ while True:
 		t_0 = time.time_ns()
 	
 	read_serial=str(ser.readline())
+	print(read_serial)
+	if r.match(read_serial) is not None:
+		print("Got em")
 	
-	if len(read_serial) > 13 and len(read_serial) < 21:
+	if len(read_serial) > 10 and len(read_serial) < 21:
 		read_serial = read_serial[2:-5]
 		split = read_serial.split(",")
 		a_data[count] = float(split[0])*(5/1024)
