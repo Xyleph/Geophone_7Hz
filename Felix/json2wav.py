@@ -1,23 +1,18 @@
 import os
+import sys
 from json import load as load
 import scipy.io.wavfile as wav
-from numpy import array
+import numpy as np
+from utils import getlatest
 
+args = sys.argv
 path = os.path.dirname(os.path.realpath(__file__))
-path += "/payload"
-os.chdir(path)
-files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
-files.reverse()
-
-for one_file in files:
-    if one_file[-5:] == ".json":
-        newest = one_file
-        break
-print("Opening:", newest)
+toopen = getlatest(path, ".json", args)
+print(f"Opening : {toopen}")
 
 a = []
 
-f = open(newest, "r")
+f = open(toopen, "r")
 data = load(f)
 a_value = data.get("a")
 a_value = a_value.items()
@@ -27,9 +22,15 @@ for x in a_value:
 
 a = a[1:]
 f.close()
+a = np.array(a)
 
-a_norm = [float(i)/max(a) for i in a]
+rms = np.sqrt(np.mean(a**2))
+a = a - rms
 
-a_norm = array(a_norm)
+a_norm = a/max(abs(a))
 
-wav.write("TestWrite.wav", 44100, a_norm)
+print(f"Max : {max(a_norm)} Min : {min(a_norm)}")
+
+out_name = toopen.split("/")
+out_name = out_name[-1]
+wav.write(f"{out_name[:-5]}_geo.wav", 1810, a_norm)

@@ -4,6 +4,7 @@ import numpy as np
 import os
 import sys
 import json
+from utils import getlatest
 
 def graph(channel, name, data, color):
 	value = data.get(name)
@@ -16,17 +17,6 @@ def graph(channel, name, data, color):
     
 	plt.plot(channel, label = name, color = color)
 
-
-def getlatest(path):
-	os.chdir(path)
-	files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
-	files.reverse()
-
-	for one_file in files:
-		if one_file[-5:] == ".json":
-			return one_file
-
-
 errmsg = f"Channel(s) to be plotted need to be added as arguments (eg:python3 {sys.argv[0]} a b c)"
 
 def main():
@@ -37,19 +27,7 @@ def main():
 		print(errmsg)
 	else:
 		path = os.path.dirname(os.path.realpath(__file__))
-		for arg in args:
-			if arg[:5] == "file=":
-				if arg[-5:] == ".json":
-					toopen = path + "/" + arg[5:]
-				elif arg[0] == "/" or arg[0] == "~":
-					print(arg)
-					path = agr[5:]
-					toopen = getlatest(path)
-				else:
-					path += "/" + arg[5:]
-					toopen = getlatest(path)
-			else:
-				toopen = getlatest(path)
+		toopen = getlatest(path, ".json", args)
 		print("Opening:", toopen)
 
 		f = open(toopen, "r")

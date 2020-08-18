@@ -21,9 +21,6 @@ while True:
 		t_0 = time.time_ns()
 	
 	read_serial=str(ser.readline())
-	print(read_serial)
-	if r.match(read_serial) is not None:
-		print("Got em")
 	
 	if len(read_serial) > 10 and len(read_serial) < 21:
 		read_serial = read_serial[2:-5]
