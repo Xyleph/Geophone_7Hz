@@ -37,6 +37,7 @@ rms = np.sqrt(np.mean(a**2))
 a = a - rms
 
 a_norm = a/max(abs(a))
+a_norm = (a_norm*(2**15)).astype(np.int16)
 
 print(f"Max : {max(a_norm)} Min : {min(a_norm)}")
 
